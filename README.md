@@ -7,5 +7,9 @@
 		<em>图片示例2</em>
 	</p>
 </p>
-![image](https://github.com/lpl-9527/Weather-lpl/blob/master/Photo-Weather/1.png)
-![image](https://github.com/lpl-9527/Weather-lpl/blob/master/Photo-Weather/2.png)
+<p align="center">
+	<img src="https://github.com/lpl-9527/Weather-lpl/blob/master/Photo-Weather/2.png" alt="Sample"  width="250" height="400">
+	<p align="center">
+		<em>图片示例2</em>
+	</p>
+</p>
