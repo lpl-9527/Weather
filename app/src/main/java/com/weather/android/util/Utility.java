@@ -8,6 +8,11 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+
 import com.weather.android.db.City;
 import com.weather.android.db.County;
 import com.weather.android.db.Province;
@@ -23,6 +28,7 @@ import static org.litepal.LitePalApplication.getContext;
 
 public class Utility {
   private static ProgressDialog progressDialog;
+
   /**
    * 解析和处理服务器返回的省级数据
    */
@@ -137,4 +143,11 @@ public class Utility {
     return false;
   }
 
+  public static void rotateImageView(Animation animation, View view) {
+    animation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+    animation.setRepeatCount(Animation.INFINITE);
+    animation.setDuration(2000);
+    animation.setInterpolator(new LinearInterpolator());
+    view.startAnimation(animation);
+  }
 }

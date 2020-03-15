@@ -1,11 +1,17 @@
 package com.weather.android;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +27,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.bumptech.glide.Glide;
 import com.weather.android.db.City;
 import com.weather.android.db.County;
@@ -27,6 +36,7 @@ import com.weather.android.db.Province;
 import com.weather.android.gson.Forecast;
 import com.weather.android.gson.Weather;
 import com.weather.android.service.AutoUpdateService;
+import com.weather.android.service.LocationService;
 import com.weather.android.util.HttpUtil;
 import com.weather.android.util.Utility;
 
@@ -39,6 +49,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.weather.android.util.Utility.checkLocationPermission;
+import static com.weather.android.util.Utility.isGPSOPen;
+import static com.weather.android.util.Utility.rotateImageView;
 import static org.litepal.LitePalApplication.getContext;
 
 public class WeatherActivity extends AppCompatActivity {
@@ -72,6 +85,9 @@ public class WeatherActivity extends AppCompatActivity {
   private TextView sportText;
 
   private ImageView bingPicImg;
+  private ImageView fixLocation;
+  private ImageView loading;
+  private View loadinglayout;
 
   private String mWeatherId;
   /**
@@ -97,10 +113,38 @@ public class WeatherActivity extends AppCompatActivity {
   private String mcity;
   private String mcounty;
   private volatile boolean flag = false;
+  private LocationService locationService;
+  private ProgressDialog progressDialog;
+  private Animation animation;
+  private static final int LOCATION_CODE = 1;
+  private BDLocationListener mListener = new BDLocationListener() {
+    @Override
+    public void onReceiveLocation(BDLocation location) {
+      mprovince = location.getProvince();
+      mcity = location.getCity();
+      mcounty = location.getDistrict();
+      Log.d("TAg", "onReceiveLocation: " + mprovince + mcity + mcounty);
+      if (!"".equals(mcounty) && locationService != null) {
+        locationService.stop();
+        getWeatherID();
+        requestWeather(mWeatherId);
+        loading.clearAnimation();
+        loadinglayout.setVisibility(View.GONE);
+      } else {
+        loading.clearAnimation();
+        loadinglayout.setVisibility(View.GONE);
+        Toast.makeText(WeatherActivity.this, "定位失败！", Toast.LENGTH_SHORT).show();
+      }
+    }
+  };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (animation != null) {
+      loading.clearAnimation();
+      loadinglayout.setVisibility(View.GONE);
+    }
     if (Build.VERSION.SDK_INT >= 21) {
       View decorView = getWindow().getDecorView();
       decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -112,6 +156,7 @@ public class WeatherActivity extends AppCompatActivity {
     bingPicImg = findViewById(R.id.bing_pic_img);
     weatherLayout = findViewById(R.id.weather_layout);
     titleCity = findViewById(R.id.title_city);
+    fixLocation = findViewById(R.id.fix_location);
     titleUpdateTime = findViewById(R.id.title_update_time);
     degreeText = findViewById(R.id.degree_text);
     weatherInfoText = findViewById(R.id.weather_info_text);
@@ -124,7 +169,13 @@ public class WeatherActivity extends AppCompatActivity {
     swipeRefresh = findViewById(R.id.swipe_refresh);
     swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
     drawerLayout = findViewById(R.id.drawer_layout);
+    loadinglayout = findViewById(R.id.loadinglayout);
+    loading = findViewById(R.id.loading);
     navButton = findViewById(R.id.nav_button);
+    locationService = new LocationService(getApplicationContext());
+    locationService.registerListener(mListener);
+    //注册监听
+    locationService.setLocationOption(locationService.getDefaultLocationClientOption());
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String weatherString = prefs.getString("weather", null);
     if (weatherString != null) {
@@ -156,6 +207,25 @@ public class WeatherActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         drawerLayout.openDrawer(GravityCompat.START);
+      }
+    });
+    fixLocation.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (!checkLocationPermission(WeatherActivity.this)) {
+          ActivityCompat.requestPermissions(WeatherActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
+        } else {
+          if (isGPSOPen(WeatherActivity.this)) {
+            locationService.start();
+            loadinglayout.setVisibility(View.VISIBLE);
+            loadinglayout.bringToFront();
+            rotateImageView(animation, loading);
+          } else {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(intent, 1315);
+          }
+        }
       }
     });
     String bingPic = prefs.getString("bing_pic", null);
@@ -347,4 +417,63 @@ public class WeatherActivity extends AppCompatActivity {
     startService(intent);
   }
 
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == 1315) {
+      if (isGPSOPen(this)) {
+        locationService.start();
+        loadinglayout.setVisibility(View.VISIBLE);
+        loadinglayout.bringToFront();
+        rotateImageView(animation, loading);
+      } else {
+        Toast.makeText(this, "GPS未开启！请手动选择城市", Toast.LENGTH_LONG).show();
+      }
+    }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    switch (requestCode) {
+      case LOCATION_CODE: {
+        if (grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          if (isGPSOPen(this)) {
+            locationService.start();
+            loadinglayout.setVisibility(View.VISIBLE);
+            loadinglayout.bringToFront();
+            rotateImageView(animation, loading);
+          } else {
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(intent, 1315);
+          }
+        } else {
+          // 权限被用户拒绝了。
+          Toast.makeText(WeatherActivity.this, "定位权限被禁止，相关地图功能无法使用！", Toast.LENGTH_LONG).show();
+        }
+      }
+    }
+  }
+
+  /**
+   * 显示进度对话框
+   */
+  private void showProgressDialog() {
+    if (progressDialog == null) {
+      progressDialog = new ProgressDialog(getContext());
+      progressDialog.setMessage("正在定位并获取天气信息...");
+      progressDialog.setCanceledOnTouchOutside(false);
+    }
+    progressDialog.show();
+  }
+
+  /**
+   * 关闭进度对话框
+   */
+  private void closeProgressDialog() {
+    if (progressDialog != null) {
+      progressDialog.dismiss();
+    }
+  }
 }
