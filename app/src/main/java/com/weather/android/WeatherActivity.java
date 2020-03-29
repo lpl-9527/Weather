@@ -57,33 +57,20 @@ import static org.litepal.LitePalApplication.getContext;
 public class WeatherActivity extends AppCompatActivity {
 
   public DrawerLayout drawerLayout;
-
   public SwipeRefreshLayout swipeRefresh;
-
   private ScrollView weatherLayout;
-
   private Button navButton;
-
   private TextView titleCity;
-
+  private TextView schedule;
   private TextView titleUpdateTime;
-
   private TextView degreeText;
-
   private TextView weatherInfoText;
-
   private LinearLayout forecastLayout;
-
   private TextView aqiText;
-
   private TextView pm25Text;
-
   private TextView comfortText;
-
   private TextView carWashText;
-
   private TextView sportText;
-
   private ImageView bingPicImg;
   private ImageView fixLocation;
   private ImageView loading;
@@ -99,10 +86,6 @@ public class WeatherActivity extends AppCompatActivity {
    * 市列表
    */
   private List<City> cityList;
-
-  /**
-   * 县列表
-   */
   /**
    * 定位的省份
    */
@@ -156,6 +139,7 @@ public class WeatherActivity extends AppCompatActivity {
     bingPicImg = findViewById(R.id.bing_pic_img);
     weatherLayout = findViewById(R.id.weather_layout);
     titleCity = findViewById(R.id.title_city);
+    schedule = findViewById(R.id.schedule);
     fixLocation = findViewById(R.id.fix_location);
     titleUpdateTime = findViewById(R.id.title_update_time);
     degreeText = findViewById(R.id.degree_text);
@@ -226,6 +210,13 @@ public class WeatherActivity extends AppCompatActivity {
             startActivityForResult(intent, 1315);
           }
         }
+      }
+    });
+    schedule.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent=new Intent(WeatherActivity.this,scheduleActivity.class);
+        startActivity(intent);
       }
     });
     String bingPic = prefs.getString("bing_pic", null);

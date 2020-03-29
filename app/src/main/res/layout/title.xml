@@ -29,7 +29,17 @@
         android:layout_toRightOf="@id/title_city"
         android:src="@drawable/fixlocation"
         android:visibility="visible"/>
-
+    <TextView
+        android:id="@+id/schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/fix_location"
+        android:layout_marginLeft="10dp"
+        android:text="日程"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/title_update_time"
