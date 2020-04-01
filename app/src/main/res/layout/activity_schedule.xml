@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:orientation="vertical">
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,34 +12,47 @@
       android:id="@+id/datepicker"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@color/colorloadback"
       android:headerBackground="@color/colorloadback"
-      android:spinnersShown="true"
-      android:background="@color/colorloadback"/>
+      android:spinnersShown="true" />
   </LinearLayout>
-    <Button
-      android:id="@+id/lookschedule"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:text="去看看已有的计划"
-      android:textStyle="bold"
-      android:textSize="40sp" />
-  <Button
-    android:id="@+id/clear_schedule"
-    android:layout_width="wrap_content"
+  <RelativeLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:text="清除所有计划"
-    android:textColor="@color/colorBlack"
-    android:textStyle="bold"
-    android:textSize="40sp" />
+    android:background="@color/colorPrimary">
+        <Button
+          android:id="@+id/lookschedule"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
+          android:text="查看已有计划"
+          android:textSize="20dp"
+          android:textStyle="bold" />
+        <Button
+          android:id="@+id/clear_schedule"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="true"
+          android:text="清除所有计划"
+          android:textColor="@color/colorBlack"
+          android:textSize="10dp"
+          android:textStyle="bold"
+          android:visibility="gone" />
+  </RelativeLayout>
       <Button
         android:id="@+id/summary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:text="过去的一月"
+        android:background="@color/colorsummary"
+        android:text="查看月报视图"
         android:textColor="@color/colorBlack"
-        android:textStyle="bold"
-        android:textSize="40sp" />
+        android:textSize="20dp"
+        android:textStyle="bold" />
+  <ListView
+    android:id="@+id/schedule_listview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorlvback">
+  </ListView>
 </LinearLayout>

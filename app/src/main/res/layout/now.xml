@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp">
 
+  <TextView
+    android:id="@+id/schedule_info"
+    android:padding="10dp"
+    android:layout_width="180dp"
+    android:layout_height="70dp"
+    android:textColor="#dd44ff"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="@drawable/sdinfobackground"
+    android:textSize="18dp" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <TextView
         android:id="@+id/degree_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="right"
         android:textColor="#fff"
-        android:textSize="60sp" />
+        android:textSize="60dp" />
 
     <TextView
         android:id="@+id/weather_info_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="right"
         android:textColor="#fff"
-        android:textSize="20sp" />
+        android:textSize="20dp" />
+    </LinearLayout>
 
 </LinearLayout>

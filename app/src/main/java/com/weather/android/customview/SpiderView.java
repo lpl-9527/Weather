@@ -16,14 +16,14 @@ public class SpiderView extends View {
   private int centerX,centerY;
   private int count,level;
   private double angle;
-  private double []data;
+  private int []data;
 
   public SpiderView(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
     init();
   }
 
-  public SpiderView(Context context,int count, int level, double[] data) {
+  public SpiderView(Context context,int count, int level, int[] data) {
     super(context);
     this.count = count;
     this.level = level;

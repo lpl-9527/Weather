@@ -41,7 +41,9 @@ import com.weather.android.util.HttpUtil;
 import com.weather.android.util.Utility;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.litepal.crud.DataSupport;
 
@@ -49,6 +51,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.weather.android.util.DataUtil.appendZero;
 import static com.weather.android.util.Utility.checkLocationPermission;
 import static com.weather.android.util.Utility.isGPSOPen;
 import static com.weather.android.util.Utility.rotateImageView;
@@ -58,6 +61,7 @@ public class WeatherActivity extends AppCompatActivity {
 
   public DrawerLayout drawerLayout;
   public SwipeRefreshLayout swipeRefresh;
+  private SharedPreferences schedulePreferences;
   private ScrollView weatherLayout;
   private Button navButton;
   private TextView titleCity;
@@ -71,11 +75,12 @@ public class WeatherActivity extends AppCompatActivity {
   private TextView comfortText;
   private TextView carWashText;
   private TextView sportText;
+  private TextView scheduleInfo;
   private ImageView bingPicImg;
   private ImageView fixLocation;
   private ImageView loading;
   private View loadinglayout;
-
+  private Map<String, String> map;
   private String mWeatherId;
   /**
    * 省列表
@@ -156,6 +161,7 @@ public class WeatherActivity extends AppCompatActivity {
     loadinglayout = findViewById(R.id.loadinglayout);
     loading = findViewById(R.id.loading);
     navButton = findViewById(R.id.nav_button);
+    scheduleInfo = findViewById(R.id.schedule_info);
     locationService = new LocationService(getApplicationContext());
     locationService.registerListener(mListener);
     //注册监听
@@ -215,7 +221,7 @@ public class WeatherActivity extends AppCompatActivity {
     schedule.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent intent=new Intent(WeatherActivity.this,scheduleActivity.class);
+        Intent intent = new Intent(WeatherActivity.this, scheduleActivity.class);
         startActivity(intent);
       }
     });
@@ -224,6 +230,25 @@ public class WeatherActivity extends AppCompatActivity {
       Glide.with(this).load(bingPic).into(bingPicImg);
     } else {
       loadBingPic();
+    }
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    scheduleInfoIsShow();
+  }
+
+  private void scheduleInfoIsShow() {
+    Calendar calendar = Calendar.getInstance();
+    String currentdata = calendar.get(Calendar.YEAR) + appendZero(calendar.get(Calendar.MONTH) + 1) + appendZero(calendar.get(Calendar.DAY_OF_MONTH));
+    schedulePreferences = getSharedPreferences("schedule", MODE_PRIVATE);
+    map = (Map<String, String>) schedulePreferences.getAll();
+    if (map.containsKey(currentdata) && !map.get(currentdata).equals("其它")) {
+      scheduleInfo.setVisibility(View.VISIBLE);
+      scheduleInfo.setText("亲，别忘了您今天的\"" + map.get(currentdata) + "\"计划哦！");
+    } else {
+      scheduleInfo.setVisibility(View.GONE);
     }
   }
 
