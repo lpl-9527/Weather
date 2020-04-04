@@ -1,4 +1,5 @@
 <resources>
   <string name="app_name">好哇天气</string>
-  <string name="level_Introduction">共有六个级别，当>10天时为级别六，7-9天为级别五，5-6天为级别四，3-4天为级别三，1-2天为级别二，0天为最低级别</string>
+  <string name="sc_level_Introduction">共有六个级别，当>10天时为级别六，7-10天为级别五，5-6天为级别四，3-4天为级别三，1-2天为级别二，0天为最低级别</string>
+  <string name="wh_level_Introduction">共有六个级别，当>15天时为级别六，10-15天为级别五，7-9天为级别四，4-6天为级别三，1-3天为级别二，0天为最低级别</string>
 </resources>

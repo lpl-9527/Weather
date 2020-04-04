@@ -110,6 +110,7 @@ public class ChooseAreaFragment extends Fragment {
           queryCounties();
         } else if (currentLevel == LEVEL_COUNTY) {
           String weatherId = countyList.get(position).getWeatherId();
+          String countyName=countyList.get(position).getCountyName();
           if (getActivity() instanceof MainActivity) {
             Intent intent = new Intent(getActivity(), WeatherActivity.class);
             intent.putExtra("weather_id", weatherId);
@@ -120,6 +121,12 @@ public class ChooseAreaFragment extends Fragment {
             activity.drawerLayout.closeDrawers();
             activity.swipeRefresh.setRefreshing(true);
             activity.requestWeather(weatherId);
+          }else if(getActivity() instanceof weatherhistoryActivity){
+            weatherhistoryActivity activity = (weatherhistoryActivity) getActivity();
+            activity.drawerLayout.closeDrawers();
+            activity.viewRefresh.setRefreshing(true);
+            String address="http://www.tianqihoubao.com/weather/top/ruzhou.html";
+            activity.gethistoryweather(address,countyList.get(position).getCountyName());
           }
         }
       }

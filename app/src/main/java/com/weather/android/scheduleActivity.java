@@ -1,10 +1,16 @@
 package com.weather.android;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -16,6 +22,8 @@ import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,6 +40,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static com.weather.android.util.DataUtil.appendZero;
 
@@ -39,7 +48,7 @@ public class scheduleActivity extends AppCompatActivity {
   private SharedPreferences preferences;
   private SharedPreferences.Editor edit;
   private TextView choose_day, data_schedule, item_schedule;
-  private Button summary, clearschedule, lookschedule;
+  private Button summary, clearschedule, lookschedule,weatherhistory;
   private DatePicker datepicker;
   private AlertDialog saveialog, deleateDialog, clearDialog;
   private Spinner spinner;
@@ -51,6 +60,7 @@ public class scheduleActivity extends AppCompatActivity {
   private Map map;
   private String dialogType;
   private LVAdapter lv_dapter;
+  private String currentCounty;
 
 
   @SuppressLint("NewApi")
@@ -58,9 +68,11 @@ public class scheduleActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_schedule);
+    currentCounty=getIntent().getStringExtra("currentCounty");
     preferences = getSharedPreferences("schedule", MODE_PRIVATE);
     edit = preferences.edit();
     summary = findViewById(R.id.summary);
+    weatherhistory=findViewById(R.id.weather_history);
     clearschedule = findViewById(R.id.clear_schedule);
     lookschedule = findViewById(R.id.lookschedule);
     schedule_listview = findViewById(R.id.schedule_listview);
@@ -73,9 +85,10 @@ public class scheduleActivity extends AppCompatActivity {
     datepicker.setMaxDate(maxcalendar.getTimeInMillis());
     adapter = new ArrayAdapter(this, R.layout.schedule_item, schedule_item);
     datepicker.setOnDateChangedListener(new dateChangeListener());
-    summary.setOnClickListener(new onLicklistener());
-    clearschedule.setOnClickListener(new onLicklistener());
-    lookschedule.setOnClickListener(new onLicklistener());
+    summary.setOnClickListener(new onClicklistener());
+    weatherhistory.setOnClickListener(new onClicklistener());
+    clearschedule.setOnClickListener(new onClicklistener());
+    lookschedule.setOnClickListener(new onClicklistener());
   }
 
   private class dialogOnLicklistener implements DialogInterface.OnClickListener {
@@ -167,12 +180,13 @@ public class scheduleActivity extends AppCompatActivity {
   }
 
 
-  private class onLicklistener implements View.OnClickListener {
+  private class onClicklistener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
+      Intent intent;
       switch (v.getId()) {
         case R.id.summary:
-          Intent intent = new Intent(scheduleActivity.this, summaryActivity.class);
+          intent = new Intent(scheduleActivity.this, summaryActivity.class);
           startActivity(intent);
           break;
         case R.id.clear_schedule:
@@ -180,6 +194,11 @@ public class scheduleActivity extends AppCompatActivity {
           break;
         case R.id.lookschedule:
           handlelv();
+          break;
+        case R.id.weather_history:
+          intent = new Intent(scheduleActivity.this, weatherhistoryActivity.class);
+          intent.putExtra("currentCounty",currentCounty);
+          startActivity(intent);
           break;
         default:
           throw new IllegalStateException("Unexpected value: " + v);
@@ -193,6 +212,7 @@ public class scheduleActivity extends AppCompatActivity {
       schedule_listview.setVisibility(View.VISIBLE);
       clearschedule.setVisibility(View.VISIBLE);
       summary.setVisibility(View.GONE);
+      weatherhistory.setVisibility(View.GONE);
       lv_dapter = new LVAdapter();
       schedule_listview.setAdapter(lv_dapter);
       refreshList();
@@ -202,6 +222,7 @@ public class scheduleActivity extends AppCompatActivity {
       lookschedule.setText("查看已有计划");
       clearschedule.setVisibility(View.GONE);
       summary.setVisibility(View.VISIBLE);
+      weatherhistory.setVisibility(View.VISIBLE);
     }
   }
 

@@ -222,6 +222,7 @@ public class WeatherActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         Intent intent = new Intent(WeatherActivity.this, scheduleActivity.class);
+        intent.putExtra("currentCounty",titleCity.getText().toString());
         startActivity(intent);
       }
     });

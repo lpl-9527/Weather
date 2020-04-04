@@ -42,6 +42,7 @@
         <activity android:name="com.weather.android.WeatherActivity" />
         <activity android:name=".scheduleActivity" />
         <activity android:name=".summaryActivity" />
+        <activity android:name=".weatherhistoryActivity" />
         <service
             android:name="com.weather.android.service.AutoUpdateService"
             android:enabled="true"

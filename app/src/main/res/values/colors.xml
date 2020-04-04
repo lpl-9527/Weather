@@ -8,5 +8,6 @@
     <color name="colorBlack">#000000</color>
     <color name="colorsummary">#099990</color>
     <color name="colorschedulelook">#ffff00</color>
+    <color name="colorweatherhistory">#773588</color>
     <color name="colorlvback">#aa22ff</color>
 </resources>
