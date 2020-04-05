@@ -33,5 +33,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.4.1'
     implementation 'com.google.code.gson:gson:2.7'
     implementation 'org.jsoup:jsoup:1.12.1'
-
+    implementation 'com.github.promeg:tinypinyin:2.0.3'
 }

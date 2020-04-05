@@ -7,11 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.weather.android.customview.SpiderView;
+import com.weather.android.util.Utility;
 
 import static com.weather.android.util.DataUtil.appendZero;
 
@@ -21,6 +24,7 @@ public class summaryActivity extends AppCompatActivity {
   private int datanumber[] = new int[8];
   private final int Level=6,Item=8;
   private TextView scheduledata,schedlue_title,describe;
+  private ImageView but_share;
   private Calendar calendar;
   private String currentdata;
   private SharedPreferences preferences;
@@ -31,6 +35,14 @@ public class summaryActivity extends AppCompatActivity {
     setContentView(R.layout.activity_summary);
     schedlue_title=findViewById(R.id.title_summary);
     schedlue_title.setText("日程回顾");
+    but_share=findViewById(R.id.but_share);
+    but_share.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        checkPermission();
+        Utility.shareTo(findViewById(R.id.summary_root),findViewById(R.id.need_cut_layout));
+      }
+    });
     describe=findViewById(R.id.describe);
     describe.setText(R.string.sc_level_Introduction);
     preferences = getSharedPreferences("schedule", MODE_PRIVATE);
@@ -99,5 +111,8 @@ public class summaryActivity extends AppCompatActivity {
         datalevel[i] = 1;
       }
     }
+  }
+  private void checkPermission() {
+    Utility.verifyStoragePermissions(this);
   }
 }

@@ -86,6 +86,11 @@ public class SpiderView extends View {
         }
       }
       path.close();
+      if(i==1){
+        radarPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+      }else {
+        radarPaint.setStyle(Paint.Style.STROKE);
+      }
       canvas.drawPath(path,radarPaint);
 
     }

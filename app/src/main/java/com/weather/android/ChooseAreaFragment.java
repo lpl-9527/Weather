@@ -125,8 +125,7 @@ public class ChooseAreaFragment extends Fragment {
             weatherhistoryActivity activity = (weatherhistoryActivity) getActivity();
             activity.drawerLayout.closeDrawers();
             activity.viewRefresh.setRefreshing(true);
-            String address="http://www.tianqihoubao.com/weather/top/ruzhou.html";
-            activity.gethistoryweather(address,countyList.get(position).getCountyName());
+            activity.gethistoryweather(countyList.get(position).getCountyName());
           }
         }
       }

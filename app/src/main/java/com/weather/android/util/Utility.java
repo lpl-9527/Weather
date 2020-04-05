@@ -1,18 +1,37 @@
 package com.weather.android.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Calendar;
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.LinearLayout;
 
+import com.weather.android.BuildConfig;
+import com.weather.android.R;
+import com.weather.android.customview.SharePopupWindow;
 import com.weather.android.db.City;
 import com.weather.android.db.County;
 import com.weather.android.db.Province;
@@ -27,8 +46,6 @@ import static android.app.PendingIntent.getActivity;
 import static org.litepal.LitePalApplication.getContext;
 
 public class Utility {
-  private static ProgressDialog progressDialog;
-
   /**
    * 解析和处理服务器返回的省级数据
    */
@@ -149,5 +166,68 @@ public class Utility {
     animation.setDuration(2000);
     animation.setInterpolator(new LinearInterpolator());
     view.startAnimation(animation);
+  }
+  public static void shareTo(View l_root, View l_cut) {
+    Uri shareContent=getCutImageUri(l_cut);
+    Log.d("lpl", "URI: "+shareContent.toString());
+    SharePopupWindow spw = new SharePopupWindow(getContext(), shareContent);
+    // 显示窗口
+    spw.showAtLocation(l_root, Gravity.BOTTOM, 0, 0);
+  }
+
+  private static Uri getCutImageUri(View view) {
+    String imagePath;
+    Uri contentUri;
+    File file = null;
+    Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    view.draw(canvas);
+    if (bitmap != null) {
+      try {
+        // 获取内置SD卡路径
+        String sdCardPath = Environment.getExternalStorageDirectory().getPath();
+        // 图片文件路径
+        imagePath = sdCardPath + File.separator + Calendar.getInstance().getTimeInMillis()+".png";
+        Log.d("lpl", "path: "+imagePath);
+         file = new File(imagePath);
+        if(file.exists()){
+          file.mkdirs();
+        }else{
+          file.createNewFile();
+        }
+        FileOutputStream os = new FileOutputStream(file);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+        os.flush();
+        os.close();
+      } catch (Exception e) {
+        Log.d("lpl", "getCutImageUri: "+"没有");
+        e.printStackTrace();
+      }
+    }
+    //判断是否是AndroidN以及更高的版本
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      contentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", file);
+    }else{
+      contentUri=Uri.fromFile(file);
+    }
+    return contentUri;
+  }
+  public static void verifyStoragePermissions(Activity context) {
+    String[] SdCardPermission = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] READ_EXTERNAL_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE};
+    String[] WRITE_EXTERNAL_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    if (ContextCompat.checkSelfPermission(context, SdCardPermission[0]) != PackageManager.PERMISSION_GRANTED) {
+      // 如果没有授予该权限，就去提示用户请求
+      ActivityCompat.requestPermissions( context, SdCardPermission, 100);
+    }
+    if (ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE[0]) != PackageManager.PERMISSION_GRANTED) {
+      // 如果没有授予该权限，就去提示用户请求
+      ActivityCompat.requestPermissions( context, READ_EXTERNAL_STORAGE, 500);
+    }
+
+    if (ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE[0]) != PackageManager.PERMISSION_GRANTED) {
+      // 如果没有授予该权限，就去提示用户请求
+      ActivityCompat.requestPermissions( context, WRITE_EXTERNAL_STORAGE, 600);
+    }
   }
 }

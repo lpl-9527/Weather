@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorperple">#9F56B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorloadback">#6bd379</color>
@@ -10,4 +11,5 @@
     <color name="colorschedulelook">#ffff00</color>
     <color name="colorweatherhistory">#773588</color>
     <color name="colorlvback">#aa22ff</color>
+    <color name="colorwhite">#ffffff</color>
 </resources>
