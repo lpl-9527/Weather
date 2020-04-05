@@ -3,7 +3,6 @@ package com.weather.android.customview;
 import java.util.List;
 
 
-
 import android.app.ActionBar.LayoutParams;
 import android.content.ComponentName;
 import android.content.Context;
@@ -39,17 +38,16 @@ public class SharePopupWindow extends PopupWindow {
   private List<GridView> mGridViewList;
 
   /**
-   *
    * @param context
    * @param shareContent 要分享的内容
    */
-  public SharePopupWindow(final Context context,final Uri shareContent) {
+  public SharePopupWindow(final Context context, final Uri shareContent) {
     super(context);
-    LayoutInflater inflater = (LayoutInflater) context  .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     mMenuView = inflater.inflate(R.layout.share_dialog, null);
     //获取控件
-    mGridView= mMenuView.findViewById(R.id.sharePopupWindow_gridView);
-    mTextViewClose= mMenuView.findViewById(R.id.sharePopupWindow_close);
+    mGridView = mMenuView.findViewById(R.id.sharePopupWindow_gridView);
+    mTextViewClose = mMenuView.findViewById(R.id.sharePopupWindow_close);
     //获取有分享功能的应用
     shareIntent = new Intent(Intent.ACTION_SEND);
     //shareIntent.setType("text/plain"); //纯文本
@@ -58,7 +56,7 @@ public class SharePopupWindow extends PopupWindow {
     mAppinfoList = ShareUtil.getShareAppList(context, shareIntent);
 
     //适配GridView
-    mAdapter=new AppInfoAdapter(context, mAppinfoList);
+    mAdapter = new AppInfoAdapter(context, mAppinfoList);
     mGridView.setAdapter(mAdapter);
 
     //修改GridView
@@ -70,7 +68,7 @@ public class SharePopupWindow extends PopupWindow {
       public void onItemClick(AdapterView<?> parent, View view, int position,
                               long id) {
         // TODO Auto-generated method stub
-        AppInfo appInfo=mAppinfoList.get(position);
+        AppInfo appInfo = mAppinfoList.get(position);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setComponent(new ComponentName(appInfo.getPkgName(), appInfo.getLaunchClassName()));
         //intent.setType("text/plain"); //纯文本
@@ -116,7 +114,7 @@ public class SharePopupWindow extends PopupWindow {
     int itemPaddingH = dip2px(context, 1);
     int size = mAppinfoList.size();
     // 计算GridView宽度
-    int gridviewWidth = size/2 * (itemWidth + itemPaddingH);
+    int gridviewWidth = size / 2 * (itemWidth + itemPaddingH);
 
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
         gridviewWidth, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -124,14 +122,15 @@ public class SharePopupWindow extends PopupWindow {
     mGridView.setColumnWidth(itemWidth);
     mGridView.setHorizontalSpacing(itemPaddingH);
     mGridView.setStretchMode(GridView.NO_STRETCH);
-    mGridView.setNumColumns(size/2);
+    mGridView.setNumColumns(size / 2);
   }
 
   /**
    * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-   * @param context   上下文
-   * @param dpValue   dp值
-   * @return  px值
+   *
+   * @param context 上下文
+   * @param dpValue dp值
+   * @return px值
    */
   public static int dip2px(Context context, float dpValue) {
     final float scale = context.getResources().getDisplayMetrics().density;

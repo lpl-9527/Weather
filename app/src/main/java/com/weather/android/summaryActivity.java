@@ -22,8 +22,8 @@ public class summaryActivity extends AppCompatActivity {
   private String schedule_item[] = {"运动", "购物", "拜访", "旅游", "学习", "聚会", "活动", "其它"};
   private int datalevel[] = new int[8];
   private int datanumber[] = new int[8];
-  private final int Level=6,Item=8;
-  private TextView scheduledata,schedlue_title,describe;
+  private final int Level = 6, Item = 8;
+  private TextView scheduledata, schedlue_title, describe;
   private ImageView but_share;
   private Calendar calendar;
   private String currentdata;
@@ -33,17 +33,17 @@ public class summaryActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_summary);
-    schedlue_title=findViewById(R.id.title_summary);
+    schedlue_title = findViewById(R.id.title_summary);
     schedlue_title.setText("日程回顾");
-    but_share=findViewById(R.id.but_share);
+    but_share = findViewById(R.id.but_share);
     but_share.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         checkPermission();
-        Utility.shareTo(findViewById(R.id.summary_root),findViewById(R.id.need_cut_layout));
+        Utility.shareTo(findViewById(R.id.summary_root), findViewById(R.id.need_cut_layout));
       }
     });
-    describe=findViewById(R.id.describe);
+    describe = findViewById(R.id.describe);
     describe.setText(R.string.sc_level_Introduction);
     preferences = getSharedPreferences("schedule", MODE_PRIVATE);
     calendar = Calendar.getInstance();
@@ -112,6 +112,7 @@ public class summaryActivity extends AppCompatActivity {
       }
     }
   }
+
   private void checkPermission() {
     Utility.verifyStoragePermissions(this);
   }

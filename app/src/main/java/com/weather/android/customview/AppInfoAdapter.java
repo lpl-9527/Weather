@@ -67,7 +67,7 @@ public class AppInfoAdapter extends BaseAdapter {
     }
     //设置控件的值
     viewHolder.imageViewIcon.setImageDrawable(appInfo.getAppIcon());
-    String name=appInfo.getAppName();
+    String name = appInfo.getAppName();
     viewHolder.textViewName.setText(name);
     return view;
   }
@@ -77,7 +77,7 @@ public class AppInfoAdapter extends BaseAdapter {
     TextView textViewName;
 
     public ViewHolder(View view) {
-      this.imageViewIcon =  view.findViewById(R.id.appinfo_item_icon);
+      this.imageViewIcon = view.findViewById(R.id.appinfo_item_icon);
       this.textViewName = view.findViewById(R.id.appinfo_item_name);
     }
   }

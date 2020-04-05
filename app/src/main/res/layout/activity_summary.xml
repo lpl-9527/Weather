@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/summary_root"
-  android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/colorperple">
-  <include layout="@layout/drawview"/>
+  android:background="@color/colorperple"
+  android:orientation="vertical">
+  <include layout="@layout/drawview" />
 </LinearLayout>

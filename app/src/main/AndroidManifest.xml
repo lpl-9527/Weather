@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.weather.android">
+  package="com.weather.android">
 
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <!--GPS定位-->
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.READ_PHONE_STATE" >    </uses-permission>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >    </uses-permission>
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >    </uses-permission>
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >    </uses-permission>
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >    </uses-permission>
-<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >    </uses-permission>
-<uses-permission android:name="android.permission.READ_PHONE_STATE" >    </uses-permission>
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >    </uses-permission>
+<uses-permission android:name="android.permission.READ_PHONE_STATE">    </uses-permission>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION">    </uses-permission>
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION">    </uses-permission>
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE">    </uses-permission>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE">    </uses-permission>
+<uses-permission android:name="android.permission.CHANGE_WIFI_STATE">    </uses-permission>
+<uses-permission android:name="android.permission.READ_PHONE_STATE">    </uses-permission>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">    </uses-permission>
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.VIBRATE" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
-        android:name="org.litepal.LitePalApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/logo"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+      android:name="org.litepal.LitePalApplication"
+      android:allowBackup="true"
+      android:icon="@mipmap/logo"
+      android:label="@string/app_name"
+      android:supportsRtl="true"
+      android:theme="@style/AppTheme">
       <meta-data
         android:name="com.baidu.lbsapi.API_KEY"
         android:value="mk6V6QM1KSVNjENHzz5tCEjfFHPx3HSs">
@@ -45,9 +45,9 @@
         <activity android:name=".summaryActivity" />
         <activity android:name=".weatherhistoryActivity" />
         <service
-            android:name="com.weather.android.service.AutoUpdateService"
-            android:enabled="true"
-            android:exported="true" />
+          android:name="com.weather.android.service.AutoUpdateService"
+          android:enabled="true"
+          android:exported="true" />
   <provider
     android:name="android.support.v4.content.FileProvider"
     android:authorities="com.weather.android.fileprovider"

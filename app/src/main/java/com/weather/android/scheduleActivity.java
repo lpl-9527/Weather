@@ -48,7 +48,7 @@ public class scheduleActivity extends AppCompatActivity {
   private SharedPreferences preferences;
   private SharedPreferences.Editor edit;
   private TextView choose_day, data_schedule, item_schedule;
-  private Button summary, clearschedule, lookschedule,weatherhistory;
+  private Button summary, clearschedule, lookschedule, weatherhistory;
   private DatePicker datepicker;
   private AlertDialog saveialog, deleateDialog, clearDialog;
   private Spinner spinner;
@@ -68,11 +68,11 @@ public class scheduleActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_schedule);
-    currentCounty=getIntent().getStringExtra("currentCounty");
+    currentCounty = getIntent().getStringExtra("currentCounty");
     preferences = getSharedPreferences("schedule", MODE_PRIVATE);
     edit = preferences.edit();
     summary = findViewById(R.id.summary);
-    weatherhistory=findViewById(R.id.weather_history);
+    weatherhistory = findViewById(R.id.weather_history);
     clearschedule = findViewById(R.id.clear_schedule);
     lookschedule = findViewById(R.id.lookschedule);
     schedule_listview = findViewById(R.id.schedule_listview);
@@ -197,7 +197,7 @@ public class scheduleActivity extends AppCompatActivity {
           break;
         case R.id.weather_history:
           intent = new Intent(scheduleActivity.this, weatherhistoryActivity.class);
-          intent.putExtra("currentCounty",currentCounty);
+          intent.putExtra("currentCounty", currentCounty);
           startActivity(intent);
           break;
         default:

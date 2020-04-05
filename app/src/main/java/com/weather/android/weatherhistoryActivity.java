@@ -42,15 +42,15 @@ import okhttp3.Response;
 
 public class weatherhistoryActivity extends AppCompatActivity {
   private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-  private TextView historydata,history_title,describe,county_title;
+  private TextView historydata, history_title, describe, county_title;
   private Button opencitylist;
   private ImageView but_share;
-  private String weather_item[] = {"晴","多云","阴", "雨","雪","其它"};
-  private final int Level=6,Item=6;
+  private String weather_item[] = {"晴", "多云", "阴", "雨", "雪", "其它"};
+  private final int Level = 6, Item = 6;
   private int datalevel[] = new int[6];
   private int datanumber[] = new int[6];
   private String countyName;
-  private volatile boolean flag=false;
+  private volatile boolean flag = false;
   private ProgressDialog progressDialog;
   public DrawerLayout drawerLayout;
   public SwipeRefreshLayout viewRefresh;
@@ -62,21 +62,21 @@ public class weatherhistoryActivity extends AppCompatActivity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_weatherhistory);
-    opencitylist=findViewById(R.id.citylist);
+    opencitylist = findViewById(R.id.citylist);
     opencitylist.setVisibility(View.VISIBLE);
-    historydata=findViewById(R.id.summary_history);
-    history_title=findViewById(R.id.title_summary);
-    but_share=findViewById(R.id.but_share);
-    describe=findViewById(R.id.describe);
-    county_title=findViewById(R.id.county_title);
+    historydata = findViewById(R.id.summary_history);
+    history_title = findViewById(R.id.title_summary);
+    but_share = findViewById(R.id.but_share);
+    describe = findViewById(R.id.describe);
+    county_title = findViewById(R.id.county_title);
     county_title.setVisibility(View.VISIBLE);
-    drawerLayout=findViewById(R.id.drawer_city_layout);
-    viewRefresh=findViewById(R.id.view_refresh);
+    drawerLayout = findViewById(R.id.drawer_city_layout);
+    viewRefresh = findViewById(R.id.view_refresh);
     history_title.setText("天气回顾");
     describe.setText(R.string.wh_level_Introduction);
     opencitylist.setOnClickListener(new onClickLisenter());
     but_share.setOnClickListener(new onClickLisenter());
-    countyName=getIntent().getStringExtra("currentCounty");
+    countyName = getIntent().getStringExtra("currentCounty");
     Toast.makeText(this, countyName, Toast.LENGTH_LONG).show();
     viewRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
@@ -88,14 +88,14 @@ public class weatherhistoryActivity extends AppCompatActivity {
   }
 
   public void gethistoryweather(String countyname) {
-    countyPinYin= Pinyin.toPinyin(countyname,"").toLowerCase();
-    address="http://www.tianqihoubao.com/weather/top/"+countyPinYin+".html";
-    Log.d("lpl", "拼音: "+countyPinYin);
-    countyName=countyname;
-    flag=false;
-    for(int i=0;i<Item;i++){
-      datalevel[i]=0;
-      datanumber[i]=0;
+    countyPinYin = Pinyin.toPinyin(countyname, "").toLowerCase();
+    address = "http://www.tianqihoubao.com/weather/top/" + countyPinYin + ".html";
+    Log.d("lpl", "拼音: " + countyPinYin);
+    countyName = countyname;
+    flag = false;
+    for (int i = 0; i < Item; i++) {
+      datalevel[i] = 0;
+      datanumber[i] = 0;
     }
     HttpUtil.sendOkHttpRequest(address, new Callback() {
       @Override
@@ -113,37 +113,37 @@ public class weatherhistoryActivity extends AppCompatActivity {
       public void onResponse(Call call, Response response) throws IOException {
         String responseText = response.body().string();
         String weather;
-        Document doc= Jsoup.parse(responseText);
-        Elements rows=doc.select("table[class=b]").get(0).select("tr");
-        if(rows.size()>1){
-          for(int i=2;i<rows.size();i++)
-          {
+        Document doc = Jsoup.parse(responseText);
+        Elements rows = doc.select("table[class=b]").get(0).select("tr");
+        if (rows.size() > 1) {
+          for (int i = 2; i < rows.size(); i++) {
             Element row = rows.get(i);
-            weather=row.select("td").get(2).text();
-            if(weather.indexOf(weather_item[0])!=-1){
+            weather = row.select("td").get(2).text();
+            if (weather.indexOf(weather_item[0]) != -1) {
               datanumber[0]++;
-            }else if(weather.indexOf(weather_item[1])!=-1){
+            } else if (weather.indexOf(weather_item[1]) != -1) {
               datanumber[1]++;
-            }else if(weather.indexOf(weather_item[2])!=-1){
+            } else if (weather.indexOf(weather_item[2]) != -1) {
               datanumber[2]++;
-            }else if(weather.indexOf(weather_item[3])!=-1){
+            } else if (weather.indexOf(weather_item[3]) != -1) {
               datanumber[3]++;
-            }else if(weather.indexOf(weather_item[4])!=-1){
+            } else if (weather.indexOf(weather_item[4]) != -1) {
               datanumber[4]++;
-            }else{
+            } else {
               datanumber[5]++;
             }
             System.out.println("天气:" + row.select("td").get(2).text());
           }
         }
-        flag=true;
+        flag = true;
       }
     });
     runOnUiThread(new Runnable() {
       @Override
       public void run() {
         showProgressDialog();
-        while(!flag){}
+        while (!flag) {
+        }
       }
     });
     closeProgressDialog();
@@ -176,6 +176,7 @@ public class weatherhistoryActivity extends AppCompatActivity {
     historydata.setText(schdata);
     viewRefresh.setRefreshing(false);
   }
+
   private void showProgressDialog() {
     if (progressDialog == null) {
       progressDialog = new ProgressDialog(this);
@@ -184,6 +185,7 @@ public class weatherhistoryActivity extends AppCompatActivity {
     }
     progressDialog.show();
   }
+
   private void closeProgressDialog() {
     if (progressDialog != null) {
       progressDialog.dismiss();
@@ -194,14 +196,15 @@ public class weatherhistoryActivity extends AppCompatActivity {
 
     @Override
     public void onClick(View v) {
-      if(v.getId()==R.id.citylist){
+      if (v.getId() == R.id.citylist) {
         drawerLayout.openDrawer(GravityCompat.START);
-      }else if(v.getId()==R.id.but_share){
+      } else if (v.getId() == R.id.but_share) {
         checkPermission();
-        Utility.shareTo(findViewById(R.id.layout_root),findViewById(R.id.need_cut_layout));
+        Utility.shareTo(findViewById(R.id.layout_root), findViewById(R.id.need_cut_layout));
       }
     }
   }
+
   private void checkPermission() {
     Utility.verifyStoragePermissions(this);
   }

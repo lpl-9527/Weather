@@ -167,9 +167,10 @@ public class Utility {
     animation.setInterpolator(new LinearInterpolator());
     view.startAnimation(animation);
   }
+
   public static void shareTo(View l_root, View l_cut) {
-    Uri shareContent=getCutImageUri(l_cut);
-    Log.d("lpl", "URI: "+shareContent.toString());
+    Uri shareContent = getCutImageUri(l_cut);
+    Log.d("lpl", "URI: " + shareContent.toString());
     SharePopupWindow spw = new SharePopupWindow(getContext(), shareContent);
     // 显示窗口
     spw.showAtLocation(l_root, Gravity.BOTTOM, 0, 0);
@@ -187,12 +188,12 @@ public class Utility {
         // 获取内置SD卡路径
         String sdCardPath = Environment.getExternalStorageDirectory().getPath();
         // 图片文件路径
-        imagePath = sdCardPath + File.separator + Calendar.getInstance().getTimeInMillis()+".png";
-        Log.d("lpl", "path: "+imagePath);
-         file = new File(imagePath);
-        if(file.exists()){
+        imagePath = sdCardPath + File.separator + Calendar.getInstance().getTimeInMillis() + ".png";
+        Log.d("lpl", "path: " + imagePath);
+        file = new File(imagePath);
+        if (file.exists()) {
           file.mkdirs();
-        }else{
+        } else {
           file.createNewFile();
         }
         FileOutputStream os = new FileOutputStream(file);
@@ -200,34 +201,35 @@ public class Utility {
         os.flush();
         os.close();
       } catch (Exception e) {
-        Log.d("lpl", "getCutImageUri: "+"没有");
+        Log.d("lpl", "getCutImageUri: " + "没有");
         e.printStackTrace();
       }
     }
     //判断是否是AndroidN以及更高的版本
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       contentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", file);
-    }else{
-      contentUri=Uri.fromFile(file);
+    } else {
+      contentUri = Uri.fromFile(file);
     }
     return contentUri;
   }
+
   public static void verifyStoragePermissions(Activity context) {
     String[] SdCardPermission = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     String[] READ_EXTERNAL_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE};
     String[] WRITE_EXTERNAL_STORAGE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
     if (ContextCompat.checkSelfPermission(context, SdCardPermission[0]) != PackageManager.PERMISSION_GRANTED) {
       // 如果没有授予该权限，就去提示用户请求
-      ActivityCompat.requestPermissions( context, SdCardPermission, 100);
+      ActivityCompat.requestPermissions(context, SdCardPermission, 100);
     }
     if (ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE[0]) != PackageManager.PERMISSION_GRANTED) {
       // 如果没有授予该权限，就去提示用户请求
-      ActivityCompat.requestPermissions( context, READ_EXTERNAL_STORAGE, 500);
+      ActivityCompat.requestPermissions(context, READ_EXTERNAL_STORAGE, 500);
     }
 
     if (ContextCompat.checkSelfPermission(context, WRITE_EXTERNAL_STORAGE[0]) != PackageManager.PERMISSION_GRANTED) {
       // 如果没有授予该权限，就去提示用户请求
-      ActivityCompat.requestPermissions( context, WRITE_EXTERNAL_STORAGE, 600);
+      ActivityCompat.requestPermissions(context, WRITE_EXTERNAL_STORAGE, 600);
     }
   }
 }

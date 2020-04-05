@@ -44,7 +44,7 @@ public class ShareUtil {
     //intent.setType("text/plain"); //纯文本
     intent.setType("*/*");
     PackageManager pManager = context.getPackageManager();
-    mApps = pManager.queryIntentActivities(intent,PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
+    mApps = pManager.queryIntentActivities(intent, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
     return mApps;
   }
 }
